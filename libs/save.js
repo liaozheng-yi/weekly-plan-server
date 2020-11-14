@@ -9,17 +9,16 @@ module.exports = async (ctx) => {
             ctx.body = '未携带token或token无效';
             return
         }
-        // console.log('save,连接成功');
-        const { thisYear,thisWeek, weekdays, wholeWeek } = ctx.request.body;
+        const { year,week, weekdays, wholeWeek } = ctx.request.body;
         const { uid } = decoded
         console.log(uid, ctx.request.body);
         //判断当前是否有该数据，如果有，则更新，如果没有，则添加
         let sql = {
-            insert: `INSERT INTO plans (id,uid,thisYear,thisWeek,weekdays,wholeWeek) VALUES (0,?,?,?,?,?)`,
-            update: `UPDATE plans SET weekdays=?, wholeWeek=? WHERE uid=? AND thisYear=? AND thisWeek=?`
+            insert: `INSERT INTO plans (id,uid,year,week,weekdays,wholeWeek) VALUES (0,?,?,?,?,?)`,
+            update: `UPDATE plans SET weekdays=?, wholeWeek=? WHERE uid=? AND year=? AND week=?`
         }
 
-        let [update] = await getDB().execute(sql.update, [weekdays, wholeWeek, uid, thisYear,thisWeek]);
+        let [update] = await getDB().execute(sql.update, [weekdays, wholeWeek, uid, year,week]);
         console.log('update',update.affectedRows);
         
         if (update.affectedRows > 0) {
